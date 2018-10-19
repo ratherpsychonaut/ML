@@ -105,14 +105,60 @@ namespace ML.Main
             return C;
         }
 
-        public static void Print(double[][] A, int precision)
+        public static double[][] Transpose(double[][] A)
+        {
+            var m = A[1].Length;
+            var n = A.Length;
+            var T = new double[m][]; for (int i = 0; i < m; i++) T[i] = new double[n];
+            for (int i = 0; i < m; i++) for (int j = 0; j < n; j++) T[i][j] = A[j][i];
+            return T;
+        }
+
+        public static void Print(double[][] A, int precision = -1)
         {
             for (int i = 0; i < A.Length; i++)
             {
-                for (int j = 0; j < A[i].Length; j++) Console.Write(A[i][j].ToString("0." + new string('0', precision)) + "\t");
+                for (int j = 0; j < A[i].Length; j++)
+                {
+                    var s = precision == -1 ? A[i][j].ToString() : A[i][j].ToString("0." + new string('0', precision));
+                    Console.Write(s + "\t");
+                }
                 Console.WriteLine();
             }
             Console.WriteLine();
         }
+
+        public static double[][] AddCol1(double[][] A)
+        {
+            var m = A[0].Length;
+            var n = A.Length;
+            var A1 = new double[n][]; for (int i = 0; i < n; i++) A1[i] = new double[m + 1];
+            for (int i = 0; i < n; i++) for (int j = 0; j <= m; j++) A1[i][j] = j == 0 ? 1 : A[i][j - 1];
+            return A1;
+        }
+
+        public static double[][] GetCol(double[][] A, int k)
+        {
+            return GetCols(A, new int[] { k });
+        }
+        public static double[][] GetCols(double[][] A, int[] c)
+        {
+            var n = A.Length;
+            var m = c.Length;
+            var B = new double[n][];
+            for (int i = 0; i < n; i++)
+            {
+                B[i] = new double[m]; int k = 0;
+                for (int j = 0; j < A[i].Length; j++) if (c.Contains(j)) { B[i][k] = A[i][j]; k++; }
+            }
+            return B;
+        }
+        /*public static double[] ColumnToVector(double[][] A, int k = 0)
+		{
+			var n = A.Length;
+			var V = new double[n];
+			for (int i = 0; i < n; i++) V[i] = A[i][k];
+			return V;
+		}*/
     }
 }
