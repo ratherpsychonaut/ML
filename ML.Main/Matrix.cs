@@ -8,6 +8,8 @@ namespace ML.Main
 {
     static class Matrix
     {
+        #region smart stuff
+        
         //for LU-decomposition step-by-step, double-checking the inverse, and many other cool things, see https://matrixcalc.org/en/
 
         public static double[][] Solve(double[][] A, double[][] B)
@@ -85,6 +87,10 @@ namespace ML.Main
             return X;
         }
 
+        #endregion
+
+        #region core stuff
+
         public static double[][] Multiply(double[][] A, double[][] B)
         {
             var m = A[1].Length;
@@ -114,6 +120,26 @@ namespace ML.Main
             return T;
         }
 
+        public static double[][] Scale(double[][] A, double multiplier)
+        {
+            var n = A.Length; var m = A[0].Length;
+            var R = new double[n][]; for (int i = 0; i < n; i++) R[i] = new double[m];
+            for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) R[i][j] = multiplier * A[i][j];
+            return R;
+        }
+
+        public static double[][] Substract(double[][] A, double[][] B)
+        {
+            var n = A.Length; var m = A[0].Length;
+            var R = new double[n][]; for (int i = 0; i < n; i++) R[i] = new double[m];
+            for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) R[i][j] = A[i][j] - B[i][j];
+            return R;
+        }
+
+        #endregion
+
+        #region side stuff (printing, converters, wrappers, etc)
+
         public static void Print(double[][] A, int precision = -1)
         {
             for (int i = 0; i < A.Length; i++)
@@ -126,6 +152,11 @@ namespace ML.Main
                 Console.WriteLine();
             }
             Console.WriteLine();
+        }
+
+        public static void PrintVector(double[] V, int precision = -1)
+        {
+            Console.WriteLine(string.Join(", ", V.Select(x => precision == -1 ? x.ToString() : x.ToString("0." + new string('0', precision)))));
         }
 
         public static double[][] AddCol1(double[][] A)
@@ -160,5 +191,29 @@ namespace ML.Main
 			for (int i = 0; i < n; i++) V[i] = A[i][k];
 			return V;
 		}*/
+
+        public static double[][] ArrayToVector(double[] a)
+        {
+            var v = new double[a.Length][];
+            for (int i = 0; i < a.Length; i++)
+            {
+                v[i] = new double[1]; v[i][0] = a[0];
+            }
+            return v;
+        }
+        public static double[] VectorToArray(double[][] v)
+        {
+            var a = new double[v.Length];
+            for (int i = 0; i < v.Length; i++) a[i] = v[i][0];
+            return a;
+        }
+
+        public static double VectorModule(double[] v)
+        {
+            double s = 0; for (int i = 0; i < v.Length; i++) s += v[i] * v[i];
+            return Math.Sqrt(s);
+        }
+
+        #endregion
     }
 }
