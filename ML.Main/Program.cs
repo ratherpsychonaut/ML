@@ -12,8 +12,8 @@ namespace ML.Main
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-            //Regression.Test1();
-            Regression.Test2();
+            //Regression.Test();
+            //GradientDescent.Test();
 
             Console.ReadLine();
         }
